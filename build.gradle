@@ -8,6 +8,16 @@ buildscript {
 }
 apply plugin: 'android'
 
+dependencies {
+  repositories {
+      jcenter()
+  }
+
+  dependencies {
+      provided 'de.robv.android.xposed:api:53'
+  }
+}
+
 android {
     compileSdkVersion 'android-23'
     buildToolsVersion '25.0.2'
