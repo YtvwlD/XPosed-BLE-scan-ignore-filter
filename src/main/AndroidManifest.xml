@@ -9,7 +9,7 @@
           android:value="true" />
         <meta-data
           android:name="xposeddescription"
-          android:value="" />
+          android:value="Ignores filters set by apps for startLeScan." />
         <meta-data
           android:name="xposedminversion"
           android:value="53" />
