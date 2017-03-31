@@ -12,7 +12,7 @@ public class Module implements IXposedHookZygoteInit
 {
     public void initZygote(final IXposedHookZygoteInit.StartupParam startupParam) throws Throwable
     {
-        findAndHookMethod("android.bluetooth.BluetoothAdapter", null, "startLeScan", UUID.class, LeScanCallback.class, new XC_MethodHook() {
+        findAndHookMethod("android.bluetooth.BluetoothAdapter", null, "startLeScan", UUID[].class, LeScanCallback.class, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
             {
