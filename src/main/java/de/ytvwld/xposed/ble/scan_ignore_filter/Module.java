@@ -19,7 +19,7 @@ public class Module implements IXposedHookZygoteInit
             {
                 if(param.args[0] != null)
                 {
-                    XposedBridge.log("startLeScan: Ignoring filter: " + Arrays.deepToString(param.args[0]));
+                    XposedBridge.log("startLeScan: Ignoring filter: " + Arrays.deepToString((UUID[])(param.args[0])));
                     param.args[0] = null;
                 }
             }
