@@ -18,12 +18,18 @@ public class Module implements IXposedHookZygoteInit
             @Override
             protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
             {
-                XposedBridge.log("startLeScan: BluetoothAdapter.startLeScan");
+                XposedBridge.log("startLeScan: BluetoothAdapter.startLeScan: " + Arrays.deepToString(param.args));
                 if(param.args[0] != null)
                 {
                     XposedBridge.log("startLeScan: Ignoring filter: " + Arrays.deepToString((UUID[])(param.args[0])));
                     param.args[0] = null;
                 }
+            }
+            
+            @Override
+            protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
+            {
+                XposedBridge.log("startLeScan: result: " + param.getResult());
             }
         });
     }
