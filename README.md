@@ -1,0 +1,1 @@
+# XPosed-BLE-scan-ignore-filter
