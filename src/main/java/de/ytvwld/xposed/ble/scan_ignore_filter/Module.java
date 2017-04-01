@@ -30,34 +30,46 @@ import android.bluetooth.BluetoothDevice;
 
 public class Module implements IXposedHookZygoteInit
 {
+    private static final boolean DEBUG = true;
+    
     public void initZygote(final IXposedHookZygoteInit.StartupParam startupParam) throws Throwable
     {
-        XposedBridge.log("startLeScan: initZygote");
+        if(DEBUG)
+            XposedBridge.log("startLeScan: initZygote");
         findAndHookMethod("android.bluetooth.BluetoothAdapter", null, "startLeScan", UUID[].class, LeScanCallback.class, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
             {
-                XposedBridge.log("startLeScan: BluetoothAdapter.startLeScan: " + Arrays.deepToString(param.args));
-                if(param.args[0] != null)
+                if(DEBUG)
                 {
-                    XposedBridge.log("startLeScan: Ignoring filter: " + Arrays.deepToString((UUID[])(param.args[0])));
+                    XposedBridge.log("startLeScan: BluetoothAdapter.startLeScan: " + Arrays.deepToString(param.args));
+                    if(param.args[0] != null)
+                    {
+                        XposedBridge.log("startLeScan: Ignoring filter: " + Arrays.deepToString((UUID[])(param.args[0])));
+                    }
                 }
                 param.args[0] = null;
-                final LeScanCallback originalCallback = (LeScanCallback)(param.args[1]);
-                param.args[1] = new LeScanCallback() {
-                    @Override
-                    public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord)
-                    {
-                        XposedBridge.log("startLeScan: Found: " + device.getAddress());
-                        originalCallback.onLeScan(device, rssi, scanRecord);
-                    }
-                };
+                if(DEBUG)
+                {
+                    final LeScanCallback originalCallback = (LeScanCallback)(param.args[1]);
+                    param.args[1] = new LeScanCallback() {
+                        @Override
+                        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord)
+                        {
+                            XposedBridge.log("startLeScan: Found: " + device.getAddress());
+                            originalCallback.onLeScan(device, rssi, scanRecord);
+                        }
+                    };
+                }
             }
             
             @Override
             protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
             {
-                XposedBridge.log("startLeScan: result: " + param.getResult());
+                if(DEBUG)
+                {
+                    XposedBridge.log("startLeScan: result: " + param.getResult());
+                }
             }
         });
     }
