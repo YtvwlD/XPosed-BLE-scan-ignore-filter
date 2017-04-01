@@ -26,6 +26,7 @@ import de.robv.android.xposed.XposedBridge;
 import java.util.UUID;
 import java.util.Arrays;
 import android.bluetooth.BluetoothAdapter.LeScanCallback;
+import android.bluetooth.BluetoothDevice;
 
 public class Module implements IXposedHookZygoteInit
 {
@@ -40,8 +41,17 @@ public class Module implements IXposedHookZygoteInit
                 if(param.args[0] != null)
                 {
                     XposedBridge.log("startLeScan: Ignoring filter: " + Arrays.deepToString((UUID[])(param.args[0])));
-                    param.args[0] = null;
                 }
+                param.args[0] = null;
+                final LeScanCallback originalCallback = (LeScanCallback)(param.args[1]);
+                param.args[1] = new LeScanCallback() {
+                    @Override
+                    public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord)
+                    {
+                        XposedBridge.log("startLeScan: Found: " + device.getAddress());
+                        originalCallback.onLeScan(device, rssi, scanRecord);
+                    }
+                };
             }
             
             @Override
