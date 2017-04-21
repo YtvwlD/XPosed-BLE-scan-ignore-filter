@@ -26,6 +26,8 @@ import de.robv.android.xposed.XposedBridge;
 import java.util.UUID;
 import java.util.Arrays;
 import android.bluetooth.BluetoothAdapter.LeScanCallback;
+import android.bluetooth.BluetoothGattCallback;
+import android.content.Context;
 
 public class Module implements IXposedHookZygoteInit
 {
@@ -55,6 +57,13 @@ public class Module implements IXposedHookZygoteInit
             protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
             {
                 XposedBridge.log("startLeScan: Found device: " + param.args[0]);
+            }
+        });
+        findAndHookMethod("android.bluetooth.BluetoothDevice", null, "connectGatt", Context.class, boolean.class, BluetoothGattCallback.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
+            {
+                XposedBridge.log("startLeScan: connecting: " + Arrays.deepToString(param.args));
             }
         });
     }
