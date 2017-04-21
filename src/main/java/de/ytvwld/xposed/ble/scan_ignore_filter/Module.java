@@ -50,5 +50,12 @@ public class Module implements IXposedHookZygoteInit
                 XposedBridge.log("startLeScan: result: " + param.getResult());
             }
         });
+        findAndHookMethod("android.bluetooth.BluetoothAdapter.GattCallbackWrapper", null, "onScanResult", String.class, int.class, byte[].class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable
+            {
+                XposedBridge.log("startLeScan: Found device: " + param.args[0]);
+            }
+        });
     }
 }
